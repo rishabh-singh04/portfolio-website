@@ -1,0 +1,12 @@
+packages:
+  "framer-motion": "For smooth scroll animations and page transitions"
+  "clsx": "For conditional class names"
+  "tailwind-merge": "For merging tailwind classes safely"
+  "lucide-react": "For professional icons"
+
+images: []
+
+notes:
+  - This is a pure frontend application, no backend API is required.
+  - The application is a single page smooth-scrolling portfolio.
+  - Using a dark theme exclusively as per requirements.
