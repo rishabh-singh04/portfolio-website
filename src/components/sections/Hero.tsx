@@ -1,11 +1,23 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, ArrowRight, Mail } from "lucide-react";
+import { TypeAnimation } from 'react-type-animation';
 import { ParticleCanvas } from "@/components/ui/ParticleCanvas";
 import { AnimatedGrid, FloatingOrbs, ScanLine } from "@/components/ui/AnimatedGrid";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 export function Hero() {
+  const { ref, isVisible } = useScrollAnimation();
+
+  const roles = [
+    "Software Engineer",
+    "AI Engineer",
+    "ML Engineer",
+    "Data Scientist",
+    "Backend Developer",
+  ];
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
       {/* Dark deep bg base */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.15),transparent)]" />
 
@@ -32,7 +44,7 @@ export function Hero() {
         <div className="flex flex-col items-start max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8"
           >
@@ -46,7 +58,7 @@ export function Hero() {
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-4 leading-[1.05]"
           >
@@ -61,7 +73,20 @@ export function Hero() {
                 backgroundClip: "text",
               }}
             >
-              Rishabh Singh
+              <TypeAnimation
+                sequence={[
+                  'Rishabh Singh',
+                  2000,
+                  'Rishabh',
+                  1000,
+                  'Rishabh Singh',
+                  2000,
+                ]}
+                wrapper="span"
+                speed={50}
+                repeat={Infinity}
+                cursor={true}
+              />
             </span>
             <br />
             {/* <span
@@ -78,21 +103,21 @@ export function Hero() {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.25 }}
             className="flex flex-wrap items-center gap-2 mb-6"
           >
-            {["Software Engineer"].map((role, i) => (
-              <motion.span
-                key={role}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.35 + i * 0.1, duration: 0.4 }}
-                className="px-3 py-1 rounded-md text-sm font-semibold border border-primary/20 bg-primary/5 text-primary/90 backdrop-blur-sm"
-              >
-                {role}
-              </motion.span>
-            ))}
+            <motion.div
+              className="px-3 py-1 rounded-md text-sm font-semibold border border-primary/20 bg-primary/5 text-primary/90 backdrop-blur-sm"
+            >
+              <TypeAnimation
+                sequence={roles.flatMap(role => [role, 3000]).slice(0, -1)}
+                wrapper="span"
+                speed={50}
+                repeat={Infinity}
+                cursor={false}
+              />
+            </motion.div>
           </motion.div>
 
           <motion.p

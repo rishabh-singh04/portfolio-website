@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { SectionHeading } from "../ui/SectionHeading";
 import { Github, ExternalLink } from "lucide-react";
 import { AnimatedGrid } from "@/components/ui/AnimatedGrid";
+import { LazyImage } from "@/components/ui/lazy-loading";
+import { useScrollAnimation, useStaggeredAnimation } from "@/hooks/use-scroll-animation";
 
 const PROJECTS = [
   {
@@ -75,8 +77,11 @@ const PROJECTS = [
 ];
 
 export function Projects() {
+  const { ref, isVisible } = useScrollAnimation();
+  const animatedProjects = useStaggeredAnimation(PROJECTS, 0.1);
+
   return (
-    <section id="projects" className="py-24 bg-card/30 relative overflow-hidden">
+    <section ref={ref} id="projects" className="py-24 bg-card/30 relative overflow-hidden">
       <AnimatedGrid variant="cross" opacity={0.4} />
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 60% 40% at 20% 80%, rgba(99,102,241,0.06), transparent)" }}
@@ -85,22 +90,20 @@ export function Projects() {
         <SectionHeading title="Featured Projects" subtitle="A selection of recent engineering work and AI solutions." />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PROJECTS.map((project, index) => (
+          {animatedProjects.map(({ item: project, delay }) => (
             <motion.div
               key={project.title}
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay }}
               className="group h-full flex flex-col bg-background rounded-3xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10"
             >
               {/* Project Image */}
               <div className="h-48 bg-card border-b border-white/5 relative overflow-hidden">
-                <img
+                <LazyImage
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
+                  className="w-full h-full group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
@@ -115,7 +118,7 @@ export function Projects() {
                 </p>
 
                 <div className="flex flex-wrap gap-2 mb-8">
-                  {project.tech.map(t => (
+                  {project.tech.map((t: string) => (
                     <span key={t} className="text-xs font-medium px-2.5 py-1 rounded-md bg-white/5 text-foreground/80 border border-white/5">
                       {t}
                     </span>
